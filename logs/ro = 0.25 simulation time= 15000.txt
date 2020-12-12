@@ -1,0 +1,16 @@
+SIMULATION: lambda = 1, Mi = 4, Simulation time = 15000
+Sredni czas oczekiwania na obsluge =  0.08011158486168075 Wartość teoretyczna:   0.08333333333333333
+Sredni czas przejscia przez system  =  0.33011158486168074 Wartość teoretyczna:   0.3333333333333333
+Srednia liczba klientow w kolejce =   0.07790218425445637 Wartość teoretyczna:   0.08333333333333333
+Srednia liczba klientow w systemie =   0.32692676897906736 Wartość teoretyczna:   0.3333333333333333
+
+
+
+SIMULATION: lambda = 1, Mi = 4, Simulation time = 15000
+Sredni czas oczekiwania na obsluge =  0.08920066701105372 Wartość teoretyczna:   0.08333333333333333
+Sredni czas przejscia przez system  =  0.3392006670110537 Wartość teoretyczna:   0.3333333333333333
+Srednia liczba klientow w kolejce =   0.08646980682464923 Wartość teoretyczna:   0.08333333333333333
+Srednia liczba klientow w systemie =   0.3368350033757323 Wartość teoretyczna:   0.3333333333333333
+
+
+
