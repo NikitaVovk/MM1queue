@@ -2,10 +2,10 @@ package com.company;
 
 public class Event {
     String typ;
-    double arrivalTime;
-    double serviceTime;
-    Event nextEvent=null;
-    Event prevEvent=null;
+    double arrivalTime; //czas przybycia
+    double serviceTime; //czas obsługi
+    Event nextEvent=null; //wskażnik na następne zdarzenie z listy
+    Event prevEvent=null; //wskażnik na poprzednie zdarzenie z listy
 
 
     public Event(String typ, double czasPrzyjscia, double czasObslugi, Event prevEvent) {

@@ -7,11 +7,11 @@ import java.util.ArrayList;
 public class Statistics extends Simulation {
 
 
-    public Statistics(int lam, int mi, int max_czas_symulacji) {
-        super(lam, mi, max_czas_symulacji);
+    public Statistics(int lambda, int mi, int maxSimulationTime, int runUp) {
+        super(lambda, mi, maxSimulationTime, runUp);
     }
 
-    void saveLogs(){
+    void saveLogs(){ //zapis statystyki do pliku
         File dir = new File("logs");
         if (!dir.exists()) {
             dir.mkdir();
@@ -36,7 +36,7 @@ public class Statistics extends Simulation {
         }
     }
 
-    void plotPZero(){
+    void plotPZero(){ //generowanie wykresu zbieżności p0(t) do p0 z rozkładu stacjonarnego
         ArrayList<Double> listTimeSeconds = new ArrayList<>();
         ArrayList<Double> listPZeroStacjonarny = new ArrayList<>();
 
@@ -71,11 +71,11 @@ public class Statistics extends Simulation {
         }
     }
 
-    void showStatistic(){
+    void showStatistic(){ //wyświetl statystyke
         System.out.println("Sredni czas oczekiwania na obsluge =  "+ getAvgTimeWaitingForService(arrivalTimes,startServiceTimes,servicedEvents)+
                 " Wartość teoretyczna:   "+(Math.pow(ro,2)/(lambda*(1-ro))));
         System.out.println("Sredni czas przejscia przez system  =  "+ getAvgTransitionTime(arrivalTimes,startServiceTimes,servicedEvents,mi)+
-                " Wartość teoretyczna:   "+(ro/(lambda*(1-ro))));
+                " Wartość teoretyczna:   "+((1/(double)(mi-lambda))));//(ro/(lambda*(1-ro))));
 
         System.out.println("Srednia liczba klientow w kolejce =   "+getAvgClientsInBuf(listTimes,listCountEventsInBuf,clock)+
                 " Wartość teoretyczna:   "+(Math.pow(ro,2)/(1-ro)));
@@ -86,32 +86,37 @@ public class Statistics extends Simulation {
     }
 
 
-    double getAvgClientsInBuf(ArrayList<Double> listTimes, ArrayList<Double>listCountEventsInBuf, double clock){
+    // oblicz średnią liczbę klientów w buforze
+    private double getAvgClientsInBuf(ArrayList<Double> listTimes, ArrayList<Double> listCountEventsInBuf, double clock){
         double sum = 0;
-        for (int i = 1000; i<listCountEventsInBuf.size()-1;i++){
+        for (int i = runUp; i<listCountEventsInBuf.size()-1;i++){
             sum+=((listTimes.get(i+1)-listTimes.get(i))*listCountEventsInBuf.get(i));
         }
-        return sum/clock;
+
+        return sum/(clock-runUp);
     }
-    double getAvgClientInSys(ArrayList<Double>listTimes,ArrayList<Double>listCountEventsInBuf,
-                                double serviceTime,double clock){
+    // oblicz średnią liczbę klientów w systemie
+    private double getAvgClientInSys(ArrayList<Double> listTimes, ArrayList<Double> listCountEventsInBuf,
+                                     double serviceTime, double clock){
         // System.out.println("KL W SYSTEMIE: "+obsluga_real+"  "+czas_symulacji+"   "+ (obsluga_real/czas_symulacji));
-        double wynik = getAvgClientsInBuf(listTimes,listCountEventsInBuf,clock)+(serviceTime/clock);
+        double wynik = getAvgClientsInBuf(listTimes,listCountEventsInBuf,clock)+(serviceTime/(clock-runUp));
         return wynik;
     }
-    double getAvgTimeWaitingForService (ArrayList<Double>arrivalTimes,ArrayList<Double>startServiceTimes,double servicedEvents){
+    // oblicz średni czas oczekiwania na obsługę
+    private double getAvgTimeWaitingForService(ArrayList<Double> arrivalTimes, ArrayList<Double> startServiceTimes, double servicedEvents){
         double sum = 0;
         for (int i = 0; i < servicedEvents; i++){
             sum+= (startServiceTimes.get(i)-arrivalTimes.get(i));
         }
         return sum/servicedEvents;
     }
-    double getAvgTransitionTime (ArrayList<Double>arrivalTimes,ArrayList<Double>startServiceTimes,
-                                        double events,int mi) {
-        double suma = 0;
+    // oblicz średni czas przejścia przez system
+    private double getAvgTransitionTime(ArrayList<Double> arrivalTimes, ArrayList<Double> startServiceTimes,
+                                        double events, int mi) {
+        double sum = 0;
         for (int i = 0; i < events; i++){
-            suma+= (startServiceTimes.get(i)-arrivalTimes.get(i)+(1/(double)mi));
+            sum+= (startServiceTimes.get(i)-arrivalTimes.get(i)+(1/(double)mi));
         }
-        return suma/events;
+        return sum/events;
     }
 }
