@@ -72,38 +72,62 @@ public class Statistics extends Simulation {
     }
 
     void showStatistic(){ //wyświetl statystyke
+        System.out.println("\nWyniki symulacji z parametrami wejściowymi:\nro = "+ro+"\tczas symulacji = "+maxSimulationTime+"\trozbieg = "+runUp+
+                "\tlambda = "+lambda+"\tmi = "+mi);
+        System.out.println("");
         System.out.println("Sredni czas oczekiwania na obsluge =  "+ getAvgTimeWaitingForService(arrivalTimes,startServiceTimes,servicedEvents)+
-                " Wartość teoretyczna:   "+(Math.pow(ro,2)/(lambda*(1-ro))));
+                " Wartość teoretyczna:   "+(ro/(mi-lambda)));//(Math.pow(ro,2)/(lambda*(1-ro))));
+
         System.out.println("Sredni czas przejscia przez system  =  "+ getAvgTransitionTime(arrivalTimes,startServiceTimes,servicedEvents,mi)+
-                " Wartość teoretyczna:   "+((1/(double)(mi-lambda))));//(ro/(lambda*(1-ro))));
+                " Wartość teoretyczna:   "+(ro/(lambda*(1-ro))));
 
         System.out.println("Srednia liczba klientow w kolejce =   "+getAvgClientsInBuf(listTimes,listCountEventsInBuf,clock)+
                 " Wartość teoretyczna:   "+(Math.pow(ro,2)/(1-ro)));
+
         System.out.println("Srednia liczba klientow w systemie =   "+getAvgClientInSys(listTimes,listCountEventsInBuf, serviceTime,clock)+
                 " Wartość teoretyczna:   "+(ro/(1-ro)));
 
-        System.out.println("CZAS P0:     "+ pZeroTime/clock);
+       // System.out.println("CZAS P0:     "+ pZeroTime/clock);
+    }
+
+    void showStatisticForCS(){ //wyświetl statystyke dla continuous service
+        System.out.println("\nWyniki symulacji z parametrami wejściowymi:\nro = "+ro+"\tczas symulacji = "+maxSimulationTime+"\trozbieg = "+runUp+
+                "\tlambda = "+lambda+"\tmi = "+mi);
+        System.out.println("");
+        System.out.println("Sredni czas oczekiwania na obsluge =  "+ getAvgTimeWaitingForService(arrivalTimes,startServiceTimes,servicedEvents)+
+                " Wartość teoretyczna:   "+(ro/(lambda*(1-ro))));//(Math.pow(ro,2)/(lambda*(1-ro))));
+
+        System.out.println("Sredni czas przejscia przez system  =  "+ getAvgTransitionTime(arrivalTimes,startServiceTimes,servicedEvents,mi)+
+                " Wartość teoretyczna:   "+(((2 - ro)*ro)/(lambda*(1-ro))));
+
+        System.out.println("Srednia liczba klientow w kolejce =   "+getAvgClientsInBuf(listTimes,listCountEventsInBuf,clock)+
+                " Wartość teoretyczna:   "+(ro/(1-ro)));
+
+        System.out.println("Srednia liczba klientow w systemie =   "+getAvgClientInSys(listTimes,listCountEventsInBuf, serviceTime,clock)+
+                " Wartość teoretyczna:   "+(((2 - ro)*ro)/((1-ro))));
+        System.out.println("Prawdopodobieństwo że serwer jest zajęty obsługą klienta wyimaginowanego =   "+ (serviceTimeImagClients/clock));
+
+        // System.out.println("CZAS P0:     "+ pZeroTime/clock);
     }
 
 
     // oblicz średnią liczbę klientów w buforze
     private double getAvgClientsInBuf(ArrayList<Double> listTimes, ArrayList<Double> listCountEventsInBuf, double clock){
         double sum = 0;
-        for (int i = runUp; i<listCountEventsInBuf.size()-1;i++){
+        for (int i = 0; i<listCountEventsInBuf.size()-1;i++){
             sum+=((listTimes.get(i+1)-listTimes.get(i))*listCountEventsInBuf.get(i));
         }
-
-        return sum/(clock-runUp);
+        return sum/(clock-runUp);//((double) runUp/2));
     }
     // oblicz średnią liczbę klientów w systemie
     private double getAvgClientInSys(ArrayList<Double> listTimes, ArrayList<Double> listCountEventsInBuf,
                                      double serviceTime, double clock){
-        // System.out.println("KL W SYSTEMIE: "+obsluga_real+"  "+czas_symulacji+"   "+ (obsluga_real/czas_symulacji));
         double wynik = getAvgClientsInBuf(listTimes,listCountEventsInBuf,clock)+(serviceTime/(clock-runUp));
         return wynik;
     }
     // oblicz średni czas oczekiwania na obsługę
-    private double getAvgTimeWaitingForService(ArrayList<Double> arrivalTimes, ArrayList<Double> startServiceTimes, double servicedEvents){
+    private double getAvgTimeWaitingForService(ArrayList<Double> arrivalTimes, ArrayList<Double> startServiceTimes,
+                                               double servicedEvents){
         double sum = 0;
         for (int i = 0; i < servicedEvents; i++){
             sum+= (startServiceTimes.get(i)-arrivalTimes.get(i));

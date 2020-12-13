@@ -7,10 +7,19 @@ public class EventList {
         this.head = head;
     }
 
-    public void put(Event event){ //wstaw kolejne zdarzenie na koniec listy
+    public void put(Event event){
+        //wstaw kolejne zdarzenie na koniec listy jeśli przyszedł prawdziwy klient
+        if (event.typ.equals("REAL_CLIENT")){
         Event last = this.getLast();
         event.prevEvent = last;
         last.nextEvent=event;
+        }
+        //wstaw kolejne zdarzenie na początek listy jeśli przyszedł wyimaginowany klient
+        else if (event.typ.equals("IMAGINE_CLIENT")){
+            event.nextEvent=head;
+            head.prevEvent=event;
+            head=event;
+        }
     }
 
     public Event get(){ //pobierz i usuń pierwsze zdarzenie z listy
