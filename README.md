@@ -42,7 +42,7 @@ In order to implement the simulation of the regular queue and the M/M/1 continuo
 </p>
 
 <p float="left">
-  <img src="3.png" width="175" />
-  <img src="1.png"  width="175"/>
-  <img src="2.png"  width="175"/>
+  <img src="3.png" width="222" />
+  <img src="1.png"  width="222"/>
+  <img src="2.png"  width="222"/>
   </p>
