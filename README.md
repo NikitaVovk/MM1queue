@@ -29,3 +29,20 @@ In order to implement the simulation of the regular queue and the M/M/1 continuo
 <h4>The queue operation algorithm is implemented in the run() method and is presented in the following block diagram</h4>
 
 ![image](https://github.com/NikitaVovk/MM1queue/assets/37519206/c54946d6-ef12-4229-b012-8482867dd768)
+
+
+<br/>
+
+<h3>Result plots</h3>
+
+<p>
+ • ro = 0.25
+ • ro = 0.5
+ • ro = 0.75
+</p>
+
+<p float="left">
+  <img src="3.png" width="175" />
+  <img src="1.png"  width="175"/>
+  <img src="2.png"  width="175"/>
+  </p>
